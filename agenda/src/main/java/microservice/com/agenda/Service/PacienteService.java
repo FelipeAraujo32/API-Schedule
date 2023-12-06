@@ -20,9 +20,6 @@ public class PacienteService {
     }
 
     public Paciente salvar(Paciente paciente){
-        
-        ///TODO: para validar o CPF
-
         return pacienteRepository.save(paciente);
     }
 
