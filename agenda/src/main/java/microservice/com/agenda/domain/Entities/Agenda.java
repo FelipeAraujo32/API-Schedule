@@ -1,4 +1,4 @@
-package microservice.com.agenda.Entities;
+package microservice.com.agenda.domain.Entities;
 
 import java.time.LocalDate;
 
