@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import microservice.com.agenda.api.dto.mapper.PacienteMapper;
+import microservice.com.agenda.api.dto.request.PacienteRequest;
+import microservice.com.agenda.api.dto.response.PacienteResponse;
 import microservice.com.agenda.domain.Entities.Paciente;
 import microservice.com.agenda.domain.Service.PacienteService;
 
@@ -21,22 +24,25 @@ import microservice.com.agenda.domain.Service.PacienteService;
 @RequestMapping("/paciente")
 public class PacienteController {
     
-    private final PacienteService pacienteService;
+    private PacienteService pacienteService;
 
     public PacienteController(PacienteService pacienteService) {
         this.pacienteService = pacienteService;
     }
 
     @PostMapping
-    public ResponseEntity<Paciente> salvar(@RequestBody Paciente paciente){
-        Paciente pacienteSalvo = pacienteService.salvar(paciente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteSalvo);
+    public ResponseEntity<PacienteResponse> salvar(@RequestBody PacienteRequest pacienteRequest){
+        Paciente paciente = PacienteMapper.toPaciente(pacienteRequest);
+        pacienteService.salvar(paciente);
+        PacienteResponse pacienteResponse = PacienteMapper.toPacienteResponse(paciente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<Paciente>> listarTodos(){
+    public ResponseEntity<List<PacienteResponse>> listarTodos(){
         List<Paciente> pacientes = pacienteService.listarTodos();
-        return ResponseEntity.status(HttpStatus.OK).body(pacientes);
+        List<PacienteResponse> pacienteResponse = PacienteMapper.ListPacienteResponse(pacientes);
+        return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
     }
 
     @GetMapping("/{id}")
