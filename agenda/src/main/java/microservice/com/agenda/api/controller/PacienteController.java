@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import microservice.com.agenda.api.dto.mapper.PacienteMapper;
 import microservice.com.agenda.api.dto.request.PacienteRequest;
 import microservice.com.agenda.api.dto.response.PacienteResponse;
@@ -25,23 +26,25 @@ import microservice.com.agenda.domain.Service.PacienteService;
 public class PacienteController {
     
     private PacienteService pacienteService;
+    private PacienteMapper pacienteMapper;
 
-    public PacienteController(PacienteService pacienteService) {
+    public PacienteController(PacienteService pacienteService, PacienteMapper pacienteMapper) {
         this.pacienteService = pacienteService;
+        this.pacienteMapper = pacienteMapper;
     }
 
     @PostMapping
-    public ResponseEntity<PacienteResponse> salvar(@RequestBody PacienteRequest pacienteRequest){
-        Paciente paciente = PacienteMapper.toPaciente(pacienteRequest);
+    public ResponseEntity<PacienteResponse> salvar(@Valid @RequestBody PacienteRequest pacienteRequest){
+        Paciente paciente = pacienteMapper.toPaciente(pacienteRequest);
         pacienteService.salvar(paciente);
-        PacienteResponse pacienteResponse = PacienteMapper.toPacienteResponse(paciente);
+        PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(paciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
     }
 
     @GetMapping
     public ResponseEntity<List<PacienteResponse>> listarTodos(){
         List<Paciente> pacientes = pacienteService.listarTodos();
-        List<PacienteResponse> pacienteResponse = PacienteMapper.ListPacienteResponse(pacientes);
+        List<PacienteResponse> pacienteResponse = pacienteMapper.toPacienteResponseList(pacientes);
         return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
     }
 
@@ -55,10 +58,12 @@ public class PacienteController {
         return ResponseEntity.status(HttpStatus.OK).body(idPaciente.get());
     }
 
-    @PutMapping
-    public ResponseEntity<Paciente> alterar(@RequestBody Paciente paciente){
-        Paciente pacienteSalvo = pacienteService.salvar(paciente);
-        return ResponseEntity.status(HttpStatus.OK).body(pacienteSalvo);
+    @PutMapping("/{id}")
+    public ResponseEntity<PacienteResponse> alterar(@PathVariable Long id, @RequestBody PacienteRequest pacienteRequest){
+        Paciente paciente = pacienteMapper.toPaciente(pacienteRequest);
+        Paciente pacienteSalvo = pacienteService.alterar(id, paciente);
+        PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(pacienteSalvo);
+        return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
     }
     
     @DeleteMapping("/{id}")
