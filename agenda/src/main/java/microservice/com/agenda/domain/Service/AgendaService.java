@@ -39,7 +39,7 @@ public class AgendaService {
             throw new BusinessException("Paciente não encontrado");
         }
 
-        Optional<Agenda> optionalHorario = agendaRepository.findByHorario(agenda.getAgendamento());
+        Optional<Agenda> optionalHorario = agendaRepository.findByAgendamento(agenda.getAgendamento());
 
         if (optionalHorario.isPresent()) {
             throw new BusinessException("Já existe agendamento para este horáio");

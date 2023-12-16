@@ -26,11 +26,11 @@ public class Agenda {
     private String descricao;
 
     @Column(name = "data_hora_init")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime entrada;
 
     @Column(name = "data_agendamento")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime agendamento;
 
     @ManyToOne

@@ -12,6 +12,7 @@ import microservice.com.agenda.domain.Entities.Agenda;
 @Repository
 public interface AgendaRepository extends JpaRepository<Agenda, Long> {
 
-    Optional<Agenda> findByHorario(LocalDateTime agendamento);
+    Optional<Agenda>findByAgendamento(LocalDateTime agendamento);
+
 
 }
