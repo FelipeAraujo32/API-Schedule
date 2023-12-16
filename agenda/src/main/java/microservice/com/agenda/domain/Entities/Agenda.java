@@ -1,6 +1,6 @@
 package microservice.com.agenda.domain.Entities;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,11 +27,11 @@ public class Agenda {
 
     @Column(name = "data_hora_init")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate entrada;
+    private LocalDateTime entrada;
 
     @Column(name = "data_agendamento")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate agendamento;
+    private LocalDateTime agendamento;
 
     @ManyToOne
     @JoinColumn(name = "paciente_id", nullable = true)
@@ -42,7 +42,7 @@ public class Agenda {
     public Agenda() {
     }
 
-    public Agenda(String descricao, LocalDate entrada, LocalDate agendamento) {
+    public Agenda(String descricao, LocalDateTime entrada, LocalDateTime agendamento) {
         this.descricao = descricao;
         this.entrada = entrada;
         this.agendamento = agendamento;
@@ -64,21 +64,31 @@ public class Agenda {
         this.descricao = descricao;
     }
 
-    public LocalDate getEntrada() {
+    public LocalDateTime getEntrada() {
         return entrada;
     }
 
-    public void setEntrada(LocalDate entrada) {
+    public void setEntrada(LocalDateTime entrada) {
         this.entrada = entrada;
     }
 
-    public LocalDate getAgendamento() {
+    public LocalDateTime getAgendamento() {
         return agendamento;
     }
 
-    public void setAgendamento(LocalDate agendamento) {
+    public void setAgendamento(LocalDateTime agendamento) {
         this.agendamento = agendamento;
     }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+    
 
     
    
