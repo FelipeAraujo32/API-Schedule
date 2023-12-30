@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import microservice.com.agenda.api.dto.request.AgendaRequest;
 import microservice.com.agenda.api.dto.response.AgendaResponse;
-import microservice.com.agenda.domain.Entities.Agenda;
+import microservice.com.agenda.domain.entities.Agenda;
 
 @Component
 public class AgendaMapper {

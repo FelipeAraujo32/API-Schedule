@@ -1,4 +1,4 @@
-package microservice.com.agenda.domain.Service;
+package microservice.com.agenda.domain.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,9 +7,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import microservice.com.agenda.domain.Entities.Agenda;
-import microservice.com.agenda.domain.Entities.Paciente;
-import microservice.com.agenda.domain.Repository.AgendaRepository;
+import microservice.com.agenda.domain.entities.Agenda;
+import microservice.com.agenda.domain.entities.Paciente;
+import microservice.com.agenda.domain.repository.AgendaRepository;
 import microservice.com.agenda.exception.BusinessException;
 
 @Service

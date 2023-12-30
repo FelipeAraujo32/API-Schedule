@@ -19,4 +19,5 @@ public class PacienteRequest {
     @NotBlank(message = "CPF do paciente é obrigatório")
     private String cpf;
     private String email;
+
 }

@@ -18,8 +18,8 @@ import jakarta.validation.Valid;
 import microservice.com.agenda.api.dto.mapper.PacienteMapper;
 import microservice.com.agenda.api.dto.request.PacienteRequest;
 import microservice.com.agenda.api.dto.response.PacienteResponse;
-import microservice.com.agenda.domain.Entities.Paciente;
-import microservice.com.agenda.domain.Service.PacienteService;
+import microservice.com.agenda.domain.entities.Paciente;
+import microservice.com.agenda.domain.service.PacienteService;
 
 @RestController
 @RequestMapping("/paciente")

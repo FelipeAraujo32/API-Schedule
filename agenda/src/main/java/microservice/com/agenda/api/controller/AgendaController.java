@@ -16,8 +16,8 @@ import jakarta.validation.Valid;
 import microservice.com.agenda.api.dto.mapper.AgendaMapper;
 import microservice.com.agenda.api.dto.request.AgendaRequest;
 import microservice.com.agenda.api.dto.response.AgendaResponse;
-import microservice.com.agenda.domain.Entities.Agenda;
-import microservice.com.agenda.domain.Service.AgendaService;
+import microservice.com.agenda.domain.entities.Agenda;
+import microservice.com.agenda.domain.service.AgendaService;
 
 @RestController
 @RequestMapping("/agenda")

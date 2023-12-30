@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import microservice.com.agenda.api.dto.request.PacienteRequest;
 import microservice.com.agenda.api.dto.response.PacienteResponse;
-import microservice.com.agenda.domain.Entities.Paciente;
+import microservice.com.agenda.domain.entities.Paciente;
 
 @Component
 public class PacienteMapper {
