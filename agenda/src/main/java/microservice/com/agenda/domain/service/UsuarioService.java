@@ -20,13 +20,14 @@ import microservice.com.agenda.domain.repository.UsuarioRepository;
 @Transactional
 public class UsuarioService implements UserDetailsService{
 
+    @Autowired
     private UsuarioRepository usuarioRepository;
     private PasswordEncoder passwordEncoder;
     
     public UsuarioService() {
     }
 
-    @Autowired
+    
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
