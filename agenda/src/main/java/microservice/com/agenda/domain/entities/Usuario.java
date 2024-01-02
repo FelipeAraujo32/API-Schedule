@@ -1,5 +1,7 @@
 package microservice.com.agenda.domain.entities;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +25,18 @@ public class Usuario {
 
     @Column(nullable = false)
     private String senha;
+
+    @Deprecated
+    public Usuario() {
+    }
+
+    @Autowired
+    public Usuario(Long id, String nome, String usuario, String senha) {
+        this.id = id;
+        this.nome = nome;
+        this.usuario = usuario;
+        this.senha = senha;
+    }
 
     public Long getId() {
         return id;

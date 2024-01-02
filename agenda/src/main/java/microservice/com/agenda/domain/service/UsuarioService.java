@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +22,11 @@ public class UsuarioService implements UserDetailsService{
 
     private UsuarioRepository usuarioRepository;
     private PasswordEncoder passwordEncoder;
+    
+    public UsuarioService() {
+    }
 
+    @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
@@ -30,7 +35,7 @@ public class UsuarioService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException {
 
-        Optional<Usuario> optUsuario = usuarioRepository.findByUser(usuario);
+        Optional<Usuario> optUsuario = usuarioRepository.findByUsuario(usuario);
 
         if(optUsuario.isEmpty()){
             throw new UsernameNotFoundException("Usuario não encontrado");}

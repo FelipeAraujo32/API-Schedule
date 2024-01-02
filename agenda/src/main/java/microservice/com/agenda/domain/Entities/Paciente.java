@@ -2,6 +2,8 @@ package microservice.com.agenda.domain.entities;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,6 +44,7 @@ public class Paciente{
     public Paciente() {
     }
 
+    @Autowired
     public Paciente(String nome, String sobrenome, String cpf, String email) {
         this.nome = nome;
         this.sobrenome = sobrenome;

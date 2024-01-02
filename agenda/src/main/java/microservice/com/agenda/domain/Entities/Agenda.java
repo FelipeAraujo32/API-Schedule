@@ -2,6 +2,7 @@ package microservice.com.agenda.domain.entities;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
@@ -42,6 +43,7 @@ public class Agenda {
     public Agenda() {
     }
 
+    @Autowired
     public Agenda(String descricao, LocalDateTime entrada, LocalDateTime agendamento) {
         this.descricao = descricao;
         this.entrada = entrada;

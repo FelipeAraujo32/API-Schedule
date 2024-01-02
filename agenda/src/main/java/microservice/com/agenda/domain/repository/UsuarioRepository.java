@@ -9,5 +9,6 @@ import microservice.com.agenda.domain.entities.Usuario;
 
 @Repository
 public interface UsuarioRepository  extends JpaRepository<Usuario, Long>{
-    Optional<Usuario> findByUser(String user);
+   
+    public Optional<Usuario> findByUsuario(String usuario);
 }

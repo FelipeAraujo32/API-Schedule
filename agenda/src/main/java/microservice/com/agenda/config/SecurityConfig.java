@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -35,40 +34,41 @@ public class SecurityConfig{
     };
 
     private UserDetailsService userDetailsService;
-    private AuthenticationManager authenticationManager;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private AuthenticationManager authenticationManager;
 
-    public SecurityConfig(AuthenticationManager authenticationManager, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public SecurityConfig(AuthenticationManager authenticationManager, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userDetailsService = userDetailsService;
+    }
+    
+    public SecurityConfig() {
     }
 
-    @Bean
     public void configure(AuthenticationManagerBuilder auth)throws Exception{
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
-    @Bean
+   
     public SecurityFilterChain SegurityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
+            //super.configure(htpp)
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            
             .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(AUTH_WHITELIST).permitAll()
             .anyRequest().authenticated())
+            
+            //Autenticação
+            .addFilter(new CustomAuthenticationFilterConfing(authenticationManager))
             .build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
-        return authenticationConfiguration.getAuthenticationManager();
+     public AuthenticationManager uthenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+        return authenticationConfiguration.getAuthenticationManager();}
+    
 
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
 }
