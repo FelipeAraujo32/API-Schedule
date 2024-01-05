@@ -1,6 +1,11 @@
 package microservice.com.agenda.domain.entities;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,17 +13,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import microservice.com.agenda.domain.entities.Roles.UsuarioRole;
 
 @Table(name = "usuario")
-@Entity
-public class Usuario {
+@Entity(name = "usuario")
+public class Usuario implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String nome;
 
     @Column(nullable = false)
     private String usuario;
@@ -26,17 +29,61 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
+    private UsuarioRole role;
+
     @Deprecated
     public Usuario() {
     }
 
-    @Autowired
-    public Usuario(Long id, String nome, String usuario, String senha) {
+    public Usuario(Long id, String usuario, String senha, UsuarioRole role) {
         this.id = id;
-        this.nome = nome;
         this.usuario = usuario;
         this.senha = senha;
+        this.role = role;
     }
+
+    public Usuario(String usuario, String senha, UsuarioRole role) {
+        this.usuario = usuario;
+        this.senha = senha;
+        this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == UsuarioRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USUARIO"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USUARIO"));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return usuario;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 
     public Long getId() {
         return id;
@@ -44,14 +91,6 @@ public class Usuario {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getUsuario() {
@@ -70,8 +109,5 @@ public class Usuario {
         this.senha = senha;
     }
 
-    
-
-    
 
 }

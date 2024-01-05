@@ -4,8 +4,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,36 +19,39 @@ public class TokenService {
 
     @Value("${api.segurity.toke.secret}")
     private String secret;
-    
-    public String generateToken(Usuario user){
+
+    public String generateToken(Usuario usuario){
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            Algorithm algorithm = Algorithm.HMAC256(secret);            
             String token = JWT.create()
-                .withIssuer("auth-api")
-                .withSubject(user.getUsuario())
-                .withExpiresAt(genExpirationDate())
-                .sign(algorithm);
+                    .withIssuer("auth-api")
+                    .withSubject(usuario.getUsuario())
+                    .withExpiresAt(genExpirationDate())
+                    .sign(algorithm);
             return token;
         } catch (JWTCreationException exception) {
-            throw new RuntimeException("Erro na geração do Token", exception);
+            throw new RuntimeException("Erro while generating token",exception);
+        
         }
     }
 
-    private Instant genExpirationDate(){
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
-    }
-
-    public String validateToken(String token){
+       public String validateToken(String token){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                .withIssuer("auth-api")
-                .build()
-                .verify(token)
-                .getSubject();
-        } catch (JWTVerificationException exception) {
-            return "";
+                    .withIssuer("auth-api")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        
+        } catch (JWTVerificationException exception){
+           return "Vai retornar vazio";
         }
     }
 
+        private Instant genExpirationDate(){
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
+    
+    
 }

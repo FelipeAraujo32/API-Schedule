@@ -41,7 +41,7 @@ public class PacienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
     }
 
-    @GetMapping
+    @GetMapping("/listartodos")
     public ResponseEntity<List<PacienteResponse>> listarTodos(){
         List<Paciente> pacientes = pacienteService.listarTodos();
         List<PacienteResponse> pacienteResponse = pacienteMapper.toPacienteResponseList(pacientes);
