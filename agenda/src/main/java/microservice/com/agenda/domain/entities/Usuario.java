@@ -13,7 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import microservice.com.agenda.domain.entities.Roles.UsuarioRole;
+import microservice.com.agenda.domain.entities.roles.UsuarioRole;
 
 @Table(name = "usuario")
 @Entity(name = "usuario")

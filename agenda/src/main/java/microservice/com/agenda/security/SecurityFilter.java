@@ -31,7 +31,6 @@ public class SecurityFilter extends OncePerRequestFilter{
         var token = this.recoverToken(request);
         if(token != null){
             var usuario_token = tokenService.validateToken(token);
-            System.out.println(usuario_token);
             UserDetails usuario = usuarioRepository.findByUsuario(usuario_token);
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -43,7 +42,7 @@ public class SecurityFilter extends OncePerRequestFilter{
         var authHeader = request.getHeader("Authorization");
         if(authHeader == null) {
             return null;}
-        else return authHeader.replace("Bearer ", "");
+        else return authHeader.replace("Bearer ", "");//Passei muito tempo para descobrir que precisava de um espaço para validar do jeito correo. Como eu coloquei: "Bearer" - Jeito correto: "Bearer "
 
     }
     
