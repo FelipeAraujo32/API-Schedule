@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -20,6 +21,7 @@ public class TokenService {
     @Value("${api.segurity.toke.secret}")
     private String secret;
 
+    
     public String generateToken(Usuario usuario){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);            
@@ -35,18 +37,19 @@ public class TokenService {
         }
     }
 
-       public String validateToken(String token){
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
-                    .withIssuer("auth-api")
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        
-        } catch (JWTVerificationException exception){
-           return "Vai retornar vazio";
-        }
+    
+    public String validateToken(String token){
+    try {
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        return JWT.require(algorithm)
+                .withIssuer("auth-api")
+                .build()
+                .verify(token)
+                .getSubject();
+    
+    } catch (JWTVerificationException exception){
+        return "Vai retornar vazio";
+    }
     }
 
         private Instant genExpirationDate(){
