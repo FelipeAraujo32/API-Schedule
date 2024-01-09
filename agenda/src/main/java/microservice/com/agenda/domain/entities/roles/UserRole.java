@@ -1,13 +1,13 @@
 package microservice.com.agenda.domain.entities.roles;
 
-public enum UsuarioRole {
+public enum UserRole {
    
     ADMIN("admin"),
-    USUARIO("usuario");
+    USUARIO("user");
 
     private String role;
 
-    private UsuarioRole(String role) {
+    private UserRole(String role) {
         this.role = role;
     }
 

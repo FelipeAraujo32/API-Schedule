@@ -13,8 +13,8 @@ import jakarta.validation.Valid;
 import microservice.com.agenda.api.dto.request.AuthenticationRequest;
 import microservice.com.agenda.api.dto.request.RegisterRequest;
 import microservice.com.agenda.api.dto.response.AuthenticationResponse;
-import microservice.com.agenda.domain.entities.Usuario;
-import microservice.com.agenda.domain.repository.UsuarioRepository;
+import microservice.com.agenda.domain.entities.User;
+import microservice.com.agenda.domain.repository.UserRepository;
 import microservice.com.agenda.security.TokenService;
 
 @RestController
@@ -22,35 +22,35 @@ import microservice.com.agenda.security.TokenService;
 public class AuthenticationController {
 
     private AuthenticationManager authenticationManager;
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
     private TokenService tokenService;
     
-    public AuthenticationController(AuthenticationManager authenticationManager, UsuarioRepository usuarioRepository,
+    public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository,
             TokenService tokenService) {
         this.authenticationManager = authenticationManager;
-        this.usuarioRepository = usuarioRepository;
+        this.userRepository = userRepository;
         this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationRequest data) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                data.usuario(), data.senha());
+                data.user(), data.password());
         var authenticate = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        var token = tokenService.generateToken((Usuario)authenticate.getPrincipal());
+        var token = tokenService.generateToken((User)authenticate.getPrincipal());
 
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequest data) {
-        if (this.usuarioRepository.findByUsuario(data.usuario()) != null)
+        if (this.userRepository.findByUser(data.user()) != null)
             return ResponseEntity.badRequest().build();
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
-        Usuario newuUsuario = new Usuario(data.usuario(), encryptedPassword, data.role());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        User newuser = new User(data.user(), encryptedPassword, data.role());
 
-        this.usuarioRepository.save(newuUsuario);
+        this.userRepository.save(newuser);
         return ResponseEntity.ok().build();
     }
 }

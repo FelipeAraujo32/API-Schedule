@@ -17,14 +17,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AgendaRequest {
+public class ScheduleRequest {
 
     @NotBlank
-    private String descricao;
+    private String description;
     @NotNull
     @Future
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss")
-    private LocalDateTime agendamento;
+    private LocalDateTime schedulingDate;
     @NotNull
-    private Long pacienteId;
+    private Long patient;
 }

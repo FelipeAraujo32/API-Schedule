@@ -1,19 +1,21 @@
 package microservice.com.agenda.api.dto.response;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PacienteResponse {
-    
+public class ScheduleResponse {
+
     private Long id;
-    private String nome;
-    private String sobrenome;
-    private String cpf;
-    private String email;
+    private String description;
+    private LocalDateTime schedulingDate;
+    private PatientResponse patientResponse;
 }

@@ -7,26 +7,26 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import microservice.com.agenda.domain.repository.UsuarioRepository;
+import microservice.com.agenda.domain.repository.UserRepository;
 
 @Transactional
 @Service
-public class UsuarioService implements UserDetailsService{
+public class UserService implements UserDetailsService{
 
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
-    public UsuarioService() {
+    public UserService() {
     }
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usuarioRepository.findByUsuario(username);
+        return userRepository.findByUser(username);
     }
     
 }

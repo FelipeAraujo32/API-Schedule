@@ -13,55 +13,56 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import microservice.com.agenda.domain.entities.roles.UsuarioRole;
+import microservice.com.agenda.domain.entities.roles.UserRole;
 
-@Table(name = "usuario")
-@Entity(name = "usuario")
-public class Usuario implements UserDetails{
+
+@Table(name = "user")
+@Entity(name = "user")
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String usuario;
+    private String user;
 
     @Column(nullable = false)
-    private String senha;
+    private String password;
 
-    private UsuarioRole role;
+    private UserRole role;
 
     @Deprecated
-    public Usuario() {
+    public User() {
     }
 
-    public Usuario(Long id, String usuario, String senha, UsuarioRole role) {
+    public User(Long id, String user, String password, UserRole role) {
         this.id = id;
-        this.usuario = usuario;
-        this.senha = senha;
+        this.user = user;
+        this.password = password;
         this.role = role;
     }
 
-    public Usuario(String usuario, String senha, UsuarioRole role) {
-        this.usuario = usuario;
-        this.senha = senha;
+    public User(String user, String password, UserRole role) {
+        this.user = user;
+        this.password = password;
         this.role = role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UsuarioRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USUARIO"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
     public String getPassword() {
-        return senha;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return usuario;
+        return user;
     }
 
     @Override
@@ -93,20 +94,20 @@ public class Usuario implements UserDetails{
         this.id = id;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getuser() {
+        return user;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setuser(String user) {
+        this.user = user;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassworda() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 

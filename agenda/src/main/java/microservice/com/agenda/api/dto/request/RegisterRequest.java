@@ -1,7 +1,7 @@
 package microservice.com.agenda.api.dto.request;
 
-import microservice.com.agenda.domain.entities.roles.UsuarioRole;
+import microservice.com.agenda.domain.entities.roles.UserRole;
 
-public record RegisterRequest (String usuario, String senha, UsuarioRole role){
+public record RegisterRequest (String user, String password, UserRole role){
     
 }

@@ -12,7 +12,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
-import microservice.com.agenda.domain.entities.Usuario;
+import microservice.com.agenda.domain.entities.User;
 
 @Service
 public class TokenService {
@@ -21,12 +21,12 @@ public class TokenService {
     private String secret;
 
     
-    public String generateToken(Usuario usuario){
+    public String generateToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);            
             String token = JWT.create()
                     .withIssuer("auth-api")
-                    .withSubject(usuario.getUsuario())
+                    .withSubject(user.getuser())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
             return token;

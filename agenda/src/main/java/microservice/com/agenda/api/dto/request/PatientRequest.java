@@ -10,13 +10,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PacienteRequest {
+public class PatientRequest {
 
-    @NotBlank(message = "Nome do paciente é obrigatório")
-    private String nome;
-    @NotBlank(message = "Sobrenome do paciente é obrigatório")
-    private String sobrenome;
-    @NotBlank(message = "CPF do paciente é obrigatório")
+    @NotBlank(message = "Patient name is required")
+    private String name;
+    @NotBlank(message = "Patient's surname is mandatory")
+    private String surname;
+    @NotBlank(message = "Patient CPF is mandatory")
     private String cpf;
     private String email;
 

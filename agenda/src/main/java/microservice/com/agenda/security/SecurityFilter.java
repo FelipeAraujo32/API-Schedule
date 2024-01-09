@@ -12,17 +12,17 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import microservice.com.agenda.domain.repository.UsuarioRepository;
+import microservice.com.agenda.domain.repository.UserRepository;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter{
 
     private TokenService tokenService;
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
-    public SecurityFilter(TokenService tokenService, UsuarioRepository usuarioRepository) {
+    public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
         this.tokenService = tokenService;
-        this.usuarioRepository = usuarioRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -30,9 +30,9 @@ public class SecurityFilter extends OncePerRequestFilter{
             throws ServletException, IOException {
         var token = this.recoverToken(request);
         if(token != null){
-            var usuario_token = tokenService.validateToken(token);
-            UserDetails usuario = usuarioRepository.findByUsuario(usuario_token);
-            var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+            var user_token = tokenService.validateToken(token);
+            UserDetails user = userRepository.findByUser(user_token);
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
