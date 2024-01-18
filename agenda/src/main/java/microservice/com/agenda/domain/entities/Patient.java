@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+
 @Entity(name = "patient")
 @Table(name = "patient")
 public class Patient{
@@ -36,7 +37,6 @@ public class Patient{
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Schedule> schedules;
 
-    @Deprecated
     public Patient() {
     }
 

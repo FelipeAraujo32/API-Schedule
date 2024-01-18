@@ -3,7 +3,7 @@ package microservice.com.agenda.api.controller;
 import java.util.List;
 import java.util.Optional;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,33 +14,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import microservice.com.agenda.api.dto.mapper.ScheduleMapper;
 import microservice.com.agenda.api.dto.request.ScheduleRequest;
 import microservice.com.agenda.api.dto.response.ScheduleResponse;
 import microservice.com.agenda.domain.entities.Schedule;
 import microservice.com.agenda.domain.service.ScheduleService;
 
 @RestController
-@RequestMapping("/agenda")
+@RequestMapping("/schedule")
 public class ScheduleController {
 
-    
+    @Autowired
     private ScheduleService scheduleService;
-    private ScheduleMapper scheduleMapper;
+    private ScheduleRequest scheduleRequest;
+    private ScheduleResponse scheduleResponse;
 
     public ScheduleController() {
     }
 
-    public ScheduleController(ScheduleService scheduleService, ScheduleMapper scheduleMapper) {
+    
+    public ScheduleController(ScheduleService scheduleService, ScheduleRequest scheduleRequest,
+            ScheduleResponse scheduleResponse) {
         this.scheduleService = scheduleService;
-        this.scheduleMapper = scheduleMapper;
+        this.scheduleRequest = scheduleRequest;
+        this.scheduleResponse = scheduleResponse;
     }
 
-    @GetMapping
+    @GetMapping("/listall")
     public ResponseEntity<List<ScheduleResponse>> searchAll() {
         List<Schedule> listAllSchedule = scheduleService.ListallSchedule();
-        List<ScheduleResponse> scheduleResponse = scheduleMapper.toScheduleResponseList(listAllSchedule);
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleResponse);
+        List<ScheduleResponse> scheduleResponses = scheduleResponse.scheduleResponseSearchAll(listAllSchedule);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleResponses);
     }
 
     @GetMapping("/{id}")
@@ -49,15 +52,15 @@ public class ScheduleController {
         if (optionalSchedule.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        ScheduleResponse scheduleResponse = scheduleMapper.toScheduleResponse(optionalSchedule.get());
+        scheduleResponse = scheduleResponse.scheduleResponseData(optionalSchedule.get());
         return ResponseEntity.status(HttpStatus.OK).body(scheduleResponse);
     }
 
-    @PostMapping
-    public ResponseEntity<ScheduleResponse> tosave(@Valid @RequestBody ScheduleRequest scheduleRequest) {
-        Schedule schedule = scheduleMapper.toSchedule(scheduleRequest);
-        Schedule saveSchedule = scheduleService.toSaveSchedule(schedule);
-        ScheduleResponse scheduleResponse = scheduleMapper.toScheduleResponse(saveSchedule);
+    @PostMapping("/save")
+    public ResponseEntity<ScheduleResponse> tosave(@Valid @RequestBody ScheduleRequest scheduleRequestdata) {
+        Schedule scheduledata = scheduleRequest.toScheduleRequestData(scheduleRequestdata);
+        Schedule Schedule = scheduleService.toSaveSchedule(scheduledata);
+        scheduleResponse = scheduleResponse.scheduleResponseData(Schedule);
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleResponse);
     }
 }

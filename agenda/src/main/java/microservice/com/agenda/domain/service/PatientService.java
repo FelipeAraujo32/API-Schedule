@@ -3,7 +3,7 @@ package microservice.com.agenda.domain.service;
 import java.util.List;
 import java.util.Optional;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +15,12 @@ import microservice.com.agenda.exception.BusinessException;
 @Transactional
 public class PatientService {
      
-    private PatientRepository patientRepository ;
+    private PatientRepository patientRepository;
 
+    public PatientService() {
+    }
+
+    @Autowired
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
@@ -60,11 +64,11 @@ public class PatientService {
 
     }
 
-    public Optional<Patient> searchById(Long id){
+    public Optional<Patient> searchById(long id){
         return patientRepository.findById(id);
     }
 
-    public void delete(Long id){
+    public void delete(long id){
         patientRepository.deleteById(id);
     }
 

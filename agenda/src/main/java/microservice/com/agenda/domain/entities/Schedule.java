@@ -13,6 +13,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 @Entity(name = "schedule")
@@ -24,6 +27,7 @@ public class Schedule {
     private Long id;
     
     @Column(name = "description")
+    @NotBlank
     private String description;
 
     @Column(name = "start_date_time")
@@ -31,15 +35,16 @@ public class Schedule {
     private LocalDateTime starTime;
 
     @Column(name = "scheduling_date")
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @Future
+    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss")
+    @NotNull
     private LocalDateTime schedulingDate;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = true)
+    @NotNull
     private Patient patient;
 
-    
-    @Deprecated
     public Schedule() {
     }
 
@@ -83,12 +88,13 @@ public class Schedule {
     }
 
     public Patient getpatient() {
-        return patient;
+        return patient; 
     }
 
     public void setpatient(Patient patient) {
         this.patient = patient;
     }
+
 
    
 }
