@@ -1,5 +1,6 @@
 package microservice.com.agenda.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,57 +25,61 @@ import microservice.com.agenda.domain.service.PatientService;
 @RestController
 @RequestMapping("/patient")
 public class PatientController {
-    
+
     @Autowired
     private PatientService patientService;
-    private PatientRequest patientRequest;
-    private PatientResponse patientResponse;
 
     public PatientController() {
     }
 
-    
-    public PatientController(PatientService patientService, PatientRequest patientRequest,
-            PatientResponse patientResponse) {
+    public PatientController(PatientService patientService) {
         this.patientService = patientService;
-        this.patientRequest = patientRequest;
-        this.patientResponse = patientResponse;
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Patient> toSaveData(@Valid @RequestBody Patient patientRequest){
-        Patient patient = patientRequest;
-        Patient patientSave = patientService.toSave(patient);
-        return ResponseEntity.status(HttpStatus.CREATED).body(patientSave);
+    public ResponseEntity<PatientResponse> toSaveData(@Valid @RequestBody PatientRequest data) {
+        Patient patient = new Patient(data.name(), data.surname(), data.cpf(), data.email());
+        patientService.toSave(patient);
+
+        PatientResponse patientResponse = new PatientResponse(patient.getId(), patient.getName(), patient.getsurname(), patient.getCpf(), patient.getEmail());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(patientResponse);
     }
 
     @GetMapping("/listall")
-    public ResponseEntity<List<PatientResponse>> listAll(){
-        List<Patient> patient = patientService.listAll();
-        List<PatientResponse> patientResponses = patientResponse.patientResponseSearchAll(patient);
+    public ResponseEntity<List<PatientResponse>> listAll() {
+
+        List<Patient> patientListAll = patientService.listAll();
+        List<PatientResponse> patientResponses = new ArrayList<>();
+
+        for (Patient patient : patientListAll){
+            PatientResponse patientResponse = new PatientResponse(patient.getId(), patient.getName(), patient.getsurname(), patient.getCpf(), patient.getEmail());
+            patientResponses.add(patientResponse);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(patientResponses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patient> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<Patient> buscarPorId(@PathVariable Long id) {
         Optional<Patient> optionalPatient = patientService.searchById(id);
-        
-        if(optionalPatient.isEmpty()){
-            return ResponseEntity.notFound().build();  
+
+        if (optionalPatient.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(optionalPatient.get());
     }
 
-    @PutMapping("/{id}/alter")
-    public ResponseEntity<PatientResponse> toAlter(@PathVariable Long id, @RequestBody PatientRequest pacienteRequest){
-        Patient patient = patientRequest.PatientRequestData(pacienteRequest);
-        Patient patientData = patientService.toAlter(id, patient);
-        patientResponse = patientResponse.patientResponseData(patientData);
+    @PutMapping("/alter/{id}")
+    public ResponseEntity<PatientResponse> toAlterPatient(@PathVariable Long id, @RequestBody PatientRequest data) {
+        Patient patient = new Patient(data.name(), data.surname(), data.cpf(), data.email());
+        patientService.toAlter(id, patient);
+
+        PatientResponse patientResponse = new PatientResponse(patient.getId(), patient.getName(), patient.getsurname(), patient.getCpf(), patient.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(patientResponse);
     }
-    
+
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         patientService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

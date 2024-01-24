@@ -31,13 +31,13 @@ public class Schedule {
     private String description;
 
     @Column(name = "start_date_time")
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss")
     private LocalDateTime starTime;
 
     @Column(name = "scheduling_date")
     @Future
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss")
-    @NotNull
+    
     private LocalDateTime schedulingDate;
 
     @ManyToOne
@@ -48,11 +48,22 @@ public class Schedule {
     public Schedule() {
     }
 
+    
+    
     @Autowired
-    public Schedule(String description, LocalDateTime starTime, LocalDateTime schedulingDate) {
+    public Schedule(Long id, String description, LocalDateTime starTime, LocalDateTime schedulingDate, Patient patient) {
+        this.id = id;
         this.description = description;
         this.starTime = starTime;
         this.schedulingDate = schedulingDate;
+        this.patient = patient;
+    }
+
+    @Autowired
+    public Schedule(String description, LocalDateTime schedulingDate, Patient patient) {
+        this.description = description;
+        this.schedulingDate = schedulingDate;
+        this.patient = patient;
     }
 
     public Long getId() {

@@ -32,20 +32,22 @@ public class PatientService {
         Optional<Patient> optionalCpf= patientRepository.findByCpf(patient.getCpf());
         if(optionalCpf.isPresent()){
             if(!optionalCpf.get().getId().equals(patient.getId())){
-                cpfExists = true;}}
-        if(cpfExists){
-            throw new BusinessException("CPF already registered.");
-        }
+                cpfExists = true;
+            }}
+            if(cpfExists){
+                throw new BusinessException("CPF already registered.");
+            }
 
         //Teste para conferir se email existe no bd
         boolean emailExists = false;
         Optional<Patient> optionalEmail = patientRepository.findByEmail(patient.getEmail());
         if(optionalEmail.isPresent()){
             if(!optionalEmail.get().getId().equals(patient.getId())){
-                emailExists = true;}}
-        if(emailExists){
-            throw new BusinessException("E-mail already registered.");
-        }
+                emailExists = true;
+            }}
+            if(emailExists){
+                throw new BusinessException("E-mail already registered.");
+            }
         return patientRepository.save(patient);
     }
 
@@ -53,14 +55,16 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
-    public Patient toAlter(long id, Patient paciente){
-        Optional<Patient> optPaciente = this.searchById(id);
+    public Patient toAlter(long id, Patient patient){
+        Optional<Patient> optPatient = this.searchById(id);
+        
 
-        if(optPaciente.isEmpty()){
+        if(optPatient.isEmpty()){
             throw new BusinessException("Patient not registered!");
         }
-        paciente.setId(id);
-        return toSave(paciente);
+
+        patient.setId(id);
+        return toSave(patient);
 
     }
 

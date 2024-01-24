@@ -46,10 +46,10 @@ public class ScheduleService {
         }
 
         Optional<Schedule> optionalTime = scheduleRepository.findByschedulingDate(schedule.getSchedulingDate());
-
         if (optionalTime.isPresent()) {
             throw new BusinessException("There is already a schedule for this time");
         }
+        
 
         schedule.setpatient(optionalPatient.get());
         schedule.setStarTime(LocalDateTime.now());

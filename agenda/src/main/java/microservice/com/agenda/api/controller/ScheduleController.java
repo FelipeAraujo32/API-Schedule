@@ -1,5 +1,6 @@
 package microservice.com.agenda.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import microservice.com.agenda.api.dto.request.ScheduleRequest;
+import microservice.com.agenda.api.dto.response.PatientResponse;
 import microservice.com.agenda.api.dto.response.ScheduleResponse;
+import microservice.com.agenda.domain.entities.Patient;
 import microservice.com.agenda.domain.entities.Schedule;
+import microservice.com.agenda.domain.service.PatientService;
 import microservice.com.agenda.domain.service.ScheduleService;
 
 @RestController
@@ -25,42 +29,71 @@ public class ScheduleController {
 
     @Autowired
     private ScheduleService scheduleService;
-    private ScheduleRequest scheduleRequest;
-    private ScheduleResponse scheduleResponse;
+    @Autowired
+    private PatientService patientService;
 
     public ScheduleController() {
     }
 
-    
-    public ScheduleController(ScheduleService scheduleService, ScheduleRequest scheduleRequest,
-            ScheduleResponse scheduleResponse) {
+    public ScheduleController(ScheduleService scheduleService, PatientService patientService) {
         this.scheduleService = scheduleService;
-        this.scheduleRequest = scheduleRequest;
-        this.scheduleResponse = scheduleResponse;
+        this.patientService = patientService;
+
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<ScheduleResponse> tosave(@Valid @RequestBody ScheduleRequest data) {
+
+        Patient patientid = new Patient();
+        patientid.setId(data.patientId());
+        patientid.getId();
+        Patient patient = patientService.searchById(data.patientId()).get();
+
+        PatientResponse patientResponse = new PatientResponse(patient.getId(), patient.getName(), patient.getsurname(),
+                patient.getCpf(), patient.getEmail());
+        System.out.println(patientResponse);
+        Schedule schedule = new Schedule(data.description(), data.schedulingDate(), patient);
+        scheduleService.toSaveSchedule(schedule);
+
+        ScheduleResponse scheduleResponse = new ScheduleResponse(schedule.getId(), schedule.getDescription(),
+                schedule.getSchedulingDate(), patientResponse);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleResponse);
     }
 
     @GetMapping("/listall")
     public ResponseEntity<List<ScheduleResponse>> searchAll() {
         List<Schedule> listAllSchedule = scheduleService.ListallSchedule();
-        List<ScheduleResponse> scheduleResponses = scheduleResponse.scheduleResponseSearchAll(listAllSchedule);
+        List<ScheduleResponse> scheduleResponses = new ArrayList<>();
+
+        for (Schedule schedule : listAllSchedule) {
+            Patient patientId = schedule.getpatient();
+            Patient patient = patientService.searchById(patientId.getId()).get();
+
+            PatientResponse patientResponse = new PatientResponse(patient.getId(), patient.getName(), patient.getsurname(), patient.getCpf(), patient.getEmail());
+            
+            ScheduleResponse scheduleResponse = new ScheduleResponse(schedule.getId(), schedule.getDescription(),
+                    schedule.getSchedulingDate(), patientResponse);
+            scheduleResponses.add(scheduleResponse);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(scheduleResponses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleResponse> searchById(@PathVariable Long id) {
+    public ResponseEntity<ScheduleResponse> searchById(@PathVariable long id) {
         Optional<Schedule> optionalSchedule = scheduleService.searchByid(id);
+        Schedule schedule = optionalSchedule.get();
+        Patient patientId = schedule.getpatient();
+        Patient patient = patientService.searchById(patientId.getId()).get();
+
+        PatientResponse patientResponse = new PatientResponse(patient.getId(), patient.getName(), patient.getsurname(), patient.getCpf(), patient.getEmail());
+
         if (optionalSchedule.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        scheduleResponse = scheduleResponse.scheduleResponseData(optionalSchedule.get());
+        
+        ScheduleResponse scheduleResponse = new ScheduleResponse(id, schedule.getDescription(), schedule.getSchedulingDate(), patientResponse);
         return ResponseEntity.status(HttpStatus.OK).body(scheduleResponse);
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<ScheduleResponse> tosave(@Valid @RequestBody ScheduleRequest scheduleRequestdata) {
-        Schedule scheduledata = scheduleRequest.toScheduleRequestData(scheduleRequestdata);
-        Schedule Schedule = scheduleService.toSaveSchedule(scheduledata);
-        scheduleResponse = scheduleResponse.scheduleResponseData(Schedule);
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleResponse);
-    }
 }
