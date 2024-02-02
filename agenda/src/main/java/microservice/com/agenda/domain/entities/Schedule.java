@@ -36,6 +36,7 @@ public class Schedule {
 
     @Column(name = "scheduling_date")
     @Future
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss")
     
     private LocalDateTime schedulingDate;
@@ -47,8 +48,6 @@ public class Schedule {
 
     public Schedule() {
     }
-
-    
     
     @Autowired
     public Schedule(Long id, String description, LocalDateTime starTime, LocalDateTime schedulingDate, Patient patient) {

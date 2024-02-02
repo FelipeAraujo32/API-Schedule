@@ -19,11 +19,11 @@ public class SecurityConfig {
 
     private SecurityFilter securityFilter;
     
-
     public SecurityConfig(SecurityFilter securityFilter) {
         this.securityFilter = securityFilter;
     }
 
+    // Filtro de Autorização de URL
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -31,13 +31,14 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, AUTH_WHITELIST).permitAll()
+                        .requestMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/patient/save").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/schedule/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/patient/alter/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/patient/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, AUTH_WHITELIST_REGISTER).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, PATIENT_DELETE).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, POST_USER).hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, GET_USER).hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, PATIENT_ALTER).hasRole("USER")
                         .anyRequest().authenticated())
-                        
                     .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
     }
@@ -53,7 +54,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    private static final String[] AUTH_WHITELIST = {
+    private String[] AUTH_WHITELIST = {
         //Swagger UI v2
         "/v2/api-docs",
         "/swagger-resources",
@@ -73,25 +74,30 @@ public class SecurityConfig {
         "/auth/register"
     };
 
-    private String[] AUTH_WHITELIST_DELETE = {
+    private String[] PATIENT_DELETE = {
         //Register ADMIN or USER
         "/{id}/delete",
     };
 
-    private String[] AUTH_WHITELIST_USER = {
+    private String[] GET_USER = {
         //Patient
         "/patient/{id}",
-        "/patient/save",
         "/patient/listall",
         //Schedule
         "/schedule/listall",
         "/schedule/{id}",
+    };
+
+    private String[] POST_USER = {
+        //Patient
+        "/patient/save",
+        //Schedule
         "/schedule/save",
     };
 
-    private String[] AUTH_WHITELIST_ALTER = {
+    private String[] PATIENT_ALTER = {
         //Alter Patient
-        "/patient/{id}/alter",
+        "/patient/alter/{id}",
     };
 
 }

@@ -32,6 +32,7 @@ public class AuthenticationController {
         this.tokenService = tokenService;
     }
 
+    // Realiza o Login
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationRequest data) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
@@ -42,6 +43,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 
+    // Registro de User, somente o ADMIN pode realizar
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequest data) {
         if (this.userRepository.findByUser(data.user()) != null)

@@ -8,5 +8,4 @@ public class BusinessException extends RuntimeException {
     public BusinessException(String text){
         super(text);
     }
-    
 }

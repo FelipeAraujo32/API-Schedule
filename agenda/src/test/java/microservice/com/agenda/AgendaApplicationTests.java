@@ -9,5 +9,4 @@ class AgendaApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

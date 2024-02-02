@@ -60,7 +60,7 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patient> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Patient> searchToId(@PathVariable Long id) {
         Optional<Patient> optionalPatient = patientService.searchById(id);
 
         if (optionalPatient.isEmpty()) {
@@ -70,7 +70,7 @@ public class PatientController {
     }
 
     @PutMapping("/alter/{id}")
-    public ResponseEntity<PatientResponse> toAlterPatient(@PathVariable Long id, @RequestBody PatientRequest data) {
+    public ResponseEntity<PatientResponse> toAlterPatient(@PathVariable long id, @RequestBody PatientRequest data) {
         Patient patient = new Patient(data.name(), data.surname(), data.cpf(), data.email());
         patientService.toAlter(id, patient);
 
