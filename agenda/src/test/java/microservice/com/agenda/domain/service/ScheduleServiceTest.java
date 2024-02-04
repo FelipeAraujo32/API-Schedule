@@ -1,14 +1,16 @@
 package microservice.com.agenda.domain.service;
 
-import static org.mockito.ArgumentMatchers.isNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,6 +23,7 @@ import jakarta.persistence.EntityManager;
 import microservice.com.agenda.domain.entities.Patient;
 import microservice.com.agenda.domain.entities.Schedule;
 import microservice.com.agenda.domain.repository.ScheduleRepository;
+import microservice.com.agenda.exception.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
 public class ScheduleServiceTest {
@@ -42,6 +45,7 @@ public class ScheduleServiceTest {
 
 
     @Test
+    @DisplayName("Should save successfully")
     void testToSaveSchedule() {
         //Arrange
         Patient patient = new Patient();
@@ -58,7 +62,6 @@ public class ScheduleServiceTest {
 
         Mockito.when(scheduleRepository.findByschedulingDate(now)).thenReturn(Optional.empty());
 
-
         //Action
         scheduleService.toSaveSchedule(schedule);
 
@@ -71,6 +74,34 @@ public class ScheduleServiceTest {
 
         Assertions.assertThat(scheduleSave.getpatient()).isNotNull();
         Assertions.assertThat(scheduleSave.getSchedulingDate()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("You should not save appointments without patients")
+    void patientNotFinding(){
+        //Arrange
+
+        Patient patient = new Patient();
+        patient.setId(1L);
+        patient.setName("Felipe");
+
+        LocalDateTime now = LocalDateTime.now();
+        Schedule schedule = new Schedule();
+        schedule.setDescription("TEST123");
+        schedule.setSchedulingDate(now);
+        schedule.setpatient(patient);
+
+        
+ 
+        Mockito.when(patientService.searchById(schedule.getpatient().getId())).thenReturn(Optional.empty());
+
+        //Action
+        BusinessException businessException = assertThrows(BusinessException.class, () -> scheduleService.toSaveSchedule(schedule));
+
+         //Assertions
+
+         Assertions.assertThat(businessException.getMessage()).isEqualTo("Patient not found");
+
     }
 
     
