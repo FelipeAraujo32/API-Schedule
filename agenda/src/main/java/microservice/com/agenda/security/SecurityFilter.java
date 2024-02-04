@@ -18,6 +18,7 @@ import microservice.com.agenda.domain.repository.UserRepository;
 @Component
 public class SecurityFilter extends OncePerRequestFilter{
 
+    
     private TokenService tokenService;
     private UserRepository userRepository;
 

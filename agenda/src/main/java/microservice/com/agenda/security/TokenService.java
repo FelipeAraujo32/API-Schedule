@@ -20,6 +20,7 @@ public class TokenService {
     @Value("${api.segurity.toke.secret}")
     private String secret;
 
+    
     public String generateToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);            
@@ -31,9 +32,11 @@ public class TokenService {
             return token;
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro while generating token",exception);
+        
         }
     }
 
+    
     public String validateToken(String token){
     try {
         Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -42,12 +45,14 @@ public class TokenService {
                 .build()
                 .verify(token)
                 .getSubject();
+    
     } catch (JWTVerificationException exception){
         return "Vai retornar vazio";
-    }}
+    }
+    }
 
-    private Instant genExpirationDate(){
-    return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        private Instant genExpirationDate(){
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
     
     

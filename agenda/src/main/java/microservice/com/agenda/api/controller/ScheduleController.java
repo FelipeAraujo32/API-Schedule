@@ -38,6 +38,7 @@ public class ScheduleController {
     public ScheduleController(ScheduleService scheduleService, PatientService patientService) {
         this.scheduleService = scheduleService;
         this.patientService = patientService;
+
     }
 
     @PostMapping("/save")
@@ -48,8 +49,9 @@ public class ScheduleController {
         patientid.getId();
         Patient patient = patientService.searchById(data.patientId()).get();
 
-        PatientResponse patientResponse = new PatientResponse(patient.getId(), patient.getName(), patient.getsurname(), patient.getCpf(), patient.getEmail());
-
+        PatientResponse patientResponse = new PatientResponse(patient.getId(), patient.getName(), patient.getsurname(),
+                patient.getCpf(), patient.getEmail());
+        System.out.println(patientResponse);
         Schedule schedule = new Schedule(data.description(), data.schedulingDate(), patient);
         scheduleService.toSaveSchedule(schedule);
 

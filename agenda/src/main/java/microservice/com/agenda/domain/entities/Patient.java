@@ -1,7 +1,6 @@
 package microservice.com.agenda.domain.entities;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 
 
 @Entity(name = "patient")
@@ -25,19 +23,15 @@ public class Patient{
     private Long id;
     
     @Column(nullable = false)
-    @NotBlank
     private String name;
     
     @Column(nullable = false)
-    @NotBlank
     private String surname;
     
     @Column(nullable = false)
-    @NotBlank
     private String cpf;
     
     @Column(nullable = false)
-    @NotBlank
     private String email;
 
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)

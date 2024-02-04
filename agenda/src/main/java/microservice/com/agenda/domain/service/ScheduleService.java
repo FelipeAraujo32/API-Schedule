@@ -30,6 +30,14 @@ public class ScheduleService {
         this.patientService = patientService;
     }
 
+    public List<Schedule> ListallSchedule() {
+        return scheduleRepository.findAll();
+    }
+
+    public Optional<Schedule> searchByid(long id) {
+        return scheduleRepository.findById(id);
+    }
+
     public Schedule toSaveSchedule(Schedule schedule) {
         Optional<Patient> optionalPatient = patientService.searchById(schedule.getpatient().getId());
 
@@ -41,17 +49,11 @@ public class ScheduleService {
         if (optionalTime.isPresent()) {
             throw new BusinessException("There is already a schedule for this time");
         }
+        
+
         schedule.setpatient(optionalPatient.get());
         schedule.setStarTime(LocalDateTime.now());
+
         return scheduleRepository.save(schedule);
     }
-
-    public List<Schedule> ListallSchedule() {
-        return scheduleRepository.findAll();
-    }
-
-    public Optional<Schedule> searchByid(long id) {
-        return scheduleRepository.findById(id);
-    }
-
 }

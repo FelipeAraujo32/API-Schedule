@@ -29,7 +29,7 @@ public class PatientService {
     
         //Teste para conferir se CPF existe no bd
         boolean cpfExists = false;
-        Optional<Patient> optionalCpf = patientRepository.findByCpf(patient.getCpf());
+        Optional<Patient> optionalCpf= patientRepository.findByCpf(patient.getCpf());
         if(optionalCpf.isPresent()){
             if(!optionalCpf.get().getId().equals(patient.getId())){
                 cpfExists = true;
@@ -58,11 +58,14 @@ public class PatientService {
     public Patient toAlter(long id, Patient patient){
         Optional<Patient> optPatient = this.searchById(id);
         
+
         if(optPatient.isEmpty()){
             throw new BusinessException("Patient not registered!");
         }
+
         patient.setId(id);
         return toSave(patient);
+
     }
 
     public Optional<Patient> searchById(long id){
